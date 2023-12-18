@@ -92,35 +92,33 @@ async function sendTransaction(nonce) {
     return null;
   }
 }
-const interval = 30000; // 60秒  
+const interval = 30; // 秒  
   
-// 查询交易记录  
-async function checkTransactionHash(txHash) {  
-  try {  
-    const transaction = await provider.getTransaction(txHash);  
-    if (transaction) {  
-      console.log(`Transaction found with hash: ${txHash}`);  
-      return true;  
-    } else {  
-      console.log(`Transaction not found with hash: ${txHash}`);  
-      return false;  
-    }  
-  } catch (error) {  
-    console.error('Error checking transaction hash:', error);  
-    return false;  
-  }  
-};  
-  
-// 循环查询直到找到指定hash  
-async function loopUntilFound(hash) {  
-  
-  setInterval(() => {  
-    const getTxHash = await checkTransactionHash(hash)  ;
-    if (getTxHash) {
-      clearInterval();
-    }; 
-  }, interval);  
-}  
+async function checkTransaction(targetTransactionHash, intervalInSeconds) {
+  async function pollTransaction() {
+    try {
+      // 使用以太坊节点提供商查询交易信息
+      const transaction = await provider.getTransaction(targetTransactionHash);
+
+      if (transaction) {
+        console.log('交易存在：', transaction);
+        // 如果存在交易，你可以在这里执行你的逻辑
+        clearInterval(intervalId);
+      } else {
+        console.log('交易不存在');
+      }
+    } catch (error) {
+      console.error('发生错误：', error);
+    }
+  }
+
+  // 设置定时器每隔一段时间执行一次查询
+  const intervalId = setInterval(pollTransaction, intervalInSeconds * 1000);
+
+  // 初始立即执行一次查询
+  await pollTransaction();
+}
+
 // 发送多次交易
 async function sendTransactions() {
   const currentNonce = await getCurrentNonce(wallet);
@@ -133,7 +131,7 @@ async function sendTransactions() {
   for (let i = 0; i < config.repeatCount; i++) {
     const gasPrice = await getGasPrice();
     const txHash = await sendTransaction(currentNonce + i, gasPrice);
-    await loopUntilFound(txHash);
+    await checkTransaction(txHash，interval);
     console.log(`success`);
     await sleep(sleepTime)
   }
