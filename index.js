@@ -131,7 +131,7 @@ async function sendTransactions() {
   for (let i = 0; i < config.repeatCount; i++) {
     const gasPrice = await getGasPrice();
     const txHash = await sendTransaction(currentNonce + i, gasPrice);
-    await checkTransaction(txHash，interval);
+    await checkTransaction(txHash,interval);
     console.log(`success`);
     await sleep(sleepTime)
   }
