@@ -127,7 +127,7 @@ async function sendTransactions() {
    const gasPrice = await getGasPrice();
     const txHash = await sendTransaction(currentNonce + 1, gasPrice);
     console.log(`txHash: ${txHash}`);
-    awaitloopUntilFound(txHash);
+    await loopUntilFound(txHash);
   /*
   for (let i = 0; i < config.repeatCount; i++) {
     const gasPrice = await getGasPrice();
