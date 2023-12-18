@@ -96,7 +96,7 @@ const interval = 30000; // 60秒
   
 // 查询交易记录  
 async function queryTransactions(hash) {  
-  return provider.getTransactionByHash(hash)  
+  return provider.getTransaction(hash)  
     .then(transaction => {  
       if (transaction) {  
         console.log(`找到了交易：${transaction.hash}`);  
@@ -127,7 +127,7 @@ async function sendTransactions() {
    const gasPrice = await getGasPrice();
     const txHash = await sendTransaction(currentNonce + 1, gasPrice);
     console.log(`txHash: ${txHash}`);
-    await loopUntilFound(txHash);
+    awaitloopUntilFound(txHash);
   /*
   for (let i = 0; i < config.repeatCount; i++) {
     const gasPrice = await getGasPrice();
