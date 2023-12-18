@@ -95,7 +95,7 @@ async function sendTransaction(nonce) {
 const interval = 30000; // 60秒  
   
 // 查询交易记录  
-async function checkTransactionHash(txHash){  
+async function checkTransactionHash(txHash) {  
   try {  
     const transaction = await provider.getTransaction(txHash);  
     if (transaction) {  
