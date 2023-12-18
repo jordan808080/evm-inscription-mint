@@ -86,11 +86,43 @@ async function sendTransaction(nonce) {
   try {
     const tx = await wallet.sendTransaction(transaction);
     console.log(`Transaction with nonce ${nonce} hash:`, tx.hash);
+    return tx.hash;
   } catch (error) {
     console.error(`Error in transaction with nonce ${nonce}:`, error.message);
+    return null;
   }
 }
-
+const interval = 30000; // 60秒  
+  
+// 查询交易记录  
+function queryTransactions(hash) {  
+  return provider.getTransactionByHash(hash)  
+    .then(transaction => {  
+      if (transaction) {  
+        console.log(`找到了交易：${transaction.hash}`);  
+        return transaction;  
+      } else {  
+        console.log('未找到交易');  
+        return null;  
+      }  
+    });  
+}  
+  
+// 循环查询直到找到指定hash  
+function loopUntilFound(hash) {  
+  if (hash==null) {
+    console.log(`loopUntilFound:check tx hash failed`);
+    return;
+  };
+  setInterval(() => {  
+    queryTransactions(hash)  
+      .then(transaction => {  
+        if (transaction) {  
+          clearInterval(); // 找到后停止循环  
+        }  
+      });  
+  }, interval);  
+}  
 // 发送多次交易
 async function sendTransactions() {
   const currentNonce = await getCurrentNonce(wallet);
@@ -98,7 +130,9 @@ async function sendTransactions() {
 
   for (let i = 0; i < config.repeatCount; i++) {
     const gasPrice = await getGasPrice();
-    await sendTransaction(currentNonce + i, gasPrice);
+    const txHash = await sendTransaction(currentNonce + i, gasPrice);
+    loopUntilFound(txHash);
+    console.log(`success`);
     await sleep(sleepTime)
   }
 }
