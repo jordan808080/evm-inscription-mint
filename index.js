@@ -95,24 +95,27 @@ async function sendTransaction(nonce) {
 const interval = 30000; // 60秒  
   
 // 查询交易记录  
-async function queryTransactions(hash) {  
-  return provider.getTransaction(hash)  
-    .then(transaction => {  
-      if (transaction) {  
-        console.log(`找到了交易：${transaction.hash}`);  
-        return transaction;  
-      } else {  
-        console.log('未找到交易');  
-        return null;  
-      }  
-    });  
-}  
+const checkTransactionHash = async (hash) => {  
+  try {  
+    const transaction = await provider.getTransaction(hash);  
+    if (transaction) {  
+      console.log(`Transaction found with hash: ${hash}`);  
+      return true;  
+    } else {  
+      console.log(`Transaction not found with hash: ${hash}`);  
+      return false;  
+    }  
+  } catch (error) {  
+    console.error('Error checking transaction hash:', error);  
+    return false;  
+  }  
+};  
   
 // 循环查询直到找到指定hash  
 async function loopUntilFound(hash) {  
   
   setInterval(() => {  
-    queryTransactions(hash)  
+    checkTransactionHash(hash)  
       .then(transaction => {  
         if (transaction) {  
           clearInterval(); // 找到后停止循环  
