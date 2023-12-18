@@ -99,7 +99,7 @@ async function sendTransactions() {
     } catch (error) {
       console.error(`Error in transaction with nonce ${nonce}:`, error.message);
       await sleep(3000);
-      sendTransactions();
+      await sendTransactions();
     }
     // await sleep(sleepTime);
   }
