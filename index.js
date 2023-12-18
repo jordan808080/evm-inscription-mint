@@ -124,20 +124,19 @@ async function loopUntilFound(hash) {
 async function sendTransactions() {
   const currentNonce = await getCurrentNonce(wallet);
   const sleepTime = config.sleepTime
-   const gasPrice = await getGasPrice();
-    const txHash = await sendTransaction(currentNonce + 1, gasPrice);
-    console.log(`txHash: ${txHash}`);
-    await loopUntilFound(txHash);
-  /*
+   // const gasPrice = await getGasPrice();
+   //  const txHash = await sendTransaction(currentNonce + 1, gasPrice);
+   //  console.log(`txHash: ${txHash}`);
+   //  await loopUntilFound(txHash);
+  
   for (let i = 0; i < config.repeatCount; i++) {
     const gasPrice = await getGasPrice();
     const txHash = await sendTransaction(currentNonce + i, gasPrice);
-    console.log(`txHash: ${txHash}`);
-    loopUntilFound(txHash);
+    await loopUntilFound(txHash);
     console.log(`success`);
-    await sleep(sleepTime)
+    // await sleep(sleepTime)
   }
-  */
+  
 }
 
 sendTransactions();
