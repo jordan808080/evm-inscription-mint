@@ -94,12 +94,12 @@ async function sendTransactions() {
       const tx = await wallet.sendTransaction(transaction);
       console.log(`Transaction with nonce ${nonce} hash:`, tx.hash);
       const receipt = await tx.wait();
-      console.log('转账已被确认：', receipt);
+      console.log('转账已被确认，blockNumber：%s,confirmations:%s', receipt.blockNumber,receipt.confirmations);
 
     } catch (error) {
       console.error(`Error in transaction with nonce ${nonce}:`, error.message);
     }
-    await sleep(sleepTime);
+    // await sleep(sleepTime);
   }
 
 }
