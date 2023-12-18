@@ -115,7 +115,7 @@ async function checkTransactionHash(txHash){
 async function loopUntilFound(hash) {  
   
   setInterval(() => {  
-    await getTxHash = await checkTransactionHash(hash)  ;
+    const getTxHash = await checkTransactionHash(hash)  ;
     if (getTxHash) {
       clearInterval();
     }; 
