@@ -101,7 +101,7 @@ async function checkTransaction(targetTransactionHash, intervalInSeconds) {
       const transaction = await provider.getTransaction(targetTransactionHash);
 
       if (transaction) {
-        console.log('交易存在：', transaction);
+        console.log('交易存在');
         // 如果存在交易，你可以在这里执行你的逻辑
         clearInterval(intervalId);
       } else {
