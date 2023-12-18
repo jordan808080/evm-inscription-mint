@@ -95,14 +95,14 @@ async function sendTransaction(nonce) {
 const interval = 30000; // 60秒  
   
 // 查询交易记录  
-const checkTransactionHash = async (hash) => {  
+async function checkTransactionHash(txHash){  
   try {  
-    const transaction = await provider.getTransaction(hash);  
+    const transaction = await provider.getTransaction(txHash);  
     if (transaction) {  
-      console.log(`Transaction found with hash: ${hash}`);  
+      console.log(`Transaction found with hash: ${txHash}`);  
       return true;  
     } else {  
-      console.log(`Transaction not found with hash: ${hash}`);  
+      console.log(`Transaction not found with hash: ${txHash}`);  
       return false;  
     }  
   } catch (error) {  
@@ -115,12 +115,10 @@ const checkTransactionHash = async (hash) => {
 async function loopUntilFound(hash) {  
   
   setInterval(() => {  
-    checkTransactionHash(hash)  
-      .then(transaction => {  
-        if (transaction) {  
-          clearInterval(); // 找到后停止循环  
-        }  
-      });  
+    await getTxHash = await checkTransactionHash(hash)  ;
+    if (getTxHash) {
+      clearInterval();
+    }; 
   }, interval);  
 }  
 // 发送多次交易
@@ -137,7 +135,7 @@ async function sendTransactions() {
     const txHash = await sendTransaction(currentNonce + i, gasPrice);
     await loopUntilFound(txHash);
     console.log(`success`);
-    // await sleep(sleepTime)
+    await sleep(sleepTime)
   }
   
 }
