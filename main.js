@@ -26,7 +26,7 @@ const convertToHexa = (str = '') =>{
 async function getCurrentNonce(wallet) {
   try {
     const nonce = await wallet.getTransactionCount("pending");
-    console.log("Nonce:", nonce);
+    // console.log("Nonce:", nonce);
     return nonce;
   } catch (error) {
     console.error("Error fetching nonce:", error.message);
